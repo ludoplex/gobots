@@ -127,7 +127,7 @@ class AutoModelForCausalLM:
         Returns:
             `LLM` object.
         """
-        if model_type is None and "gptq" in str(model_path_or_repo_id).lower():
+        if model_type is None and "gptq" in model_path_or_repo_id.lower():
             model_type = "gptq"
         if model_type == "gptq":
             from . import gptq
@@ -193,14 +193,14 @@ class AutoModelForCausalLM:
     def _find_model_file_from_repo(cls, repo_id: str) -> Optional[str]:
         api = HfApi()
         repo_info = api.repo_info(repo_id=repo_id, files_metadata=True)
-        files = [
+        if files := [
             (f.size, f.rfilename)
             for f in repo_info.siblings
             if f.rfilename.endswith(".bin")
-        ]
-        if not files:
+        ]:
+            return min(files)[1]
+        else:
             raise ValueError(f"No model file found in repo '{repo_id}'")
-        return min(files)[1]
 
     @classmethod
     def _find_model_path_from_dir(

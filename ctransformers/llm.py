@@ -414,9 +414,7 @@ class LLM:
             The generated tokens.
         """
         config = self.config
-        reset = get(reset, config.reset)
-
-        if reset:
+        if reset := get(reset, config.reset):
             self.reset()
 
         self.eval(tokens, batch_size=batch_size, threads=threads)
@@ -483,8 +481,7 @@ class LLM:
             # Check if one of the stop sequences is part of the text.
             # Note that the stop sequence may not always be at the end of text.
             if stop:
-                match = stop_regex.search(text)
-                if match:
+                if match := stop_regex.search(text):
                     text = text[: match.start()]
                     break
 
@@ -554,9 +551,7 @@ class LLM:
             stop=stop,
             reset=reset,
         )
-        if stream:
-            return text
-        return "".join(text)
+        return text if stream else "".join(text)
 
     @doc
     def embed(

@@ -164,9 +164,7 @@ class LLM:
         temperature = get(temperature, config.temperature)
         repetition_penalty = get(repetition_penalty, config.repetition_penalty)
         last_n_tokens = get(last_n_tokens, config.last_n_tokens)
-        reset = get(reset, config.reset)
-
-        if reset:
+        if reset := get(reset, config.reset):
             self.reset()
         generator.settings.top_k = top_k
         generator.settings.top_p = top_p
@@ -216,7 +214,7 @@ class LLM:
         count = 0
         length = len(self.detokenize(tokens[0]))
         text = ""
-        for token in self.generate(
+        for _ in self.generate(
             tokens,
             top_k=top_k,
             top_p=top_p,
@@ -236,8 +234,7 @@ class LLM:
             # Check if one of the stop sequences is part of the text.
             # Note that the stop sequence may not always be at the end of text.
             if stop:
-                match = stop_regex.search(text)
-                if match:
+                if match := stop_regex.search(text):
                     text = text[: match.start()]
                     break
 
@@ -307,6 +304,4 @@ class LLM:
             stop=stop,
             reset=reset,
         )
-        if stream:
-            return text
-        return "".join(text)
+        return text if stream else "".join(text)

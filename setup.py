@@ -8,8 +8,7 @@ else:
 
     cmake_args = []
     for key in ["CT_INSTRUCTIONS", "CT_CUBLAS", "CT_METAL"]:
-        value = os.environ.get(key)
-        if value:
+        if value := os.environ.get(key):
             cmake_args.append(f"-D{key}={value}")
     if cmake_args:
         kwargs["cmake_args"] = cmake_args
@@ -27,7 +26,7 @@ setup(
     long_description_content_type="text/markdown",
     author="Ravindra Marella",
     author_email="mv.ravindra007@gmail.com",
-    url="https://github.com/marella/{}".format(name),
+    url=f"https://github.com/marella/{name}",
     license="MIT",
     packages=[name, "ctransformers.gptq"],
     package_data={name: ["lib/*/*.so", "lib/*/*.dll", "lib/*/*.dylib"]},
@@ -58,6 +57,6 @@ setup(
         "Topic :: Software Development :: Libraries",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    keywords="{} transformers ai llm".format(name),
+    keywords=f"{name} transformers ai llm",
     **kwargs,
 )

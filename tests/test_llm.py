@@ -18,7 +18,7 @@ class MockLLM(LLM):
         return tokens
 
     def detokenize(self, tokens, decode=True):
-        text = " " + self.tokens[tokens[0]]
+        text = f" {self.tokens[tokens[0]]}"
         if not decode:
             text = text.encode()
         return text
